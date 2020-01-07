@@ -836,6 +836,37 @@ class user extends dbh
 		}
 	}
 
+	public function allOneCustomer($email){
+		$stmt = "SELECT email FROM user where email = '$email'";
+		$result = $this->connect()->query($stmt);
+		$numberrows = $result->num_rows;
+		if ($numberrows > 0) {
+			$data = $result->fetch_assoc();
+			$string = implode('|',$data);
+			return $string;
+		}
+		else{
+
+		}
+	}
+
+	public function allOrders(){
+		$stmt = "SELECT * FROM orders";
+		$result = $this->connect()->query($stmt);
+		$numberrows = $result->num_rows;
+		if ($numberrows >0) {
+			while ($rows= $result->fetch_assoc()) {
+				$row_date [] = $rows;
+		}
+		 return $row_date;
+			
+		}
+		else{
+			return '';
+		}
+	}
+		
+
 	############################################################
 
 
@@ -986,17 +1017,17 @@ class user extends dbh
 		$insert = "INSERT INTO orders(productID,custID,quantity,date_create) Values ('$productID','$custID','$quantity','$date')";
 		$result = $this->connect()->query($insert);
 		if($result){
-			$counter += $quantity;
+			// $this->updateCartOrder($productID,$quantity);
 		}
 		else{
-			$counter = 0
+			$counter = 0;
 			echo "<script>alert('Somtething went wrong')</script>";
 		}
 	}
 
 
-	public function allOrders(){
-		$stmt = "SELECT * FROM orders";
+	public function allMyOrders($email){
+		$stmt = "SELECT * FROM orders where custID = '$email' ";
 		$result = $this->connect()->query($stmt);
 		$numberrows = $result->num_rows;
 		if ($numberrows >0) {
@@ -1012,8 +1043,27 @@ class user extends dbh
 	}
 
 	function updateCartOrder($productID,$quantity){
-		$stmt = "UPDATE product set quantity = '$quantity' where id = '$productID'";
-		$result = $this->connect()->query($stmt);
+		$getStmt = "SELECT * from product where id = '$productID'";
+		$getResult = $this->connect()->query($getStmt)->fetch_assoc();
+		$newQuantity = ($getResult['quantity']) - ($quantity);
+		$stmtx = "UPDATE product set quantity = '$newQuantity' where id = '$productID'";
+		$result = $this->connect()->query($stmtx);
+		if (result) {
+			return true;
+		}
+	}
+
+	function treatRequestProduct($id,$productID,$quantity)
+	{
+		if ($this->updateCartOrder($productID,$quantity)) {
+			$statusStmt = "UPDATE orders set status = '1' where id = '$id'";
+			if ($this->connect()->query($statusStmt)) {
+				echo '<script>alert("Request Processed Successfully")</script>';
+			}
+		}
+		else{
+			echo '<script>alert("Error Occured")</script>';
+		}
 	}
 
 ####################################### End of User Query ##########################################################
@@ -1421,14 +1471,19 @@ class user extends dbh
 		}
 	}
 
-	public function getTotal($prodID,$quantity)
+	public function getProductQuantity($prodID)
 	{
-		$prod = $this->getCartProduct($prodID);
-		// $fetch = $prod->fetch_assoc();
-		$productPrice = $prod['productPrice'];
-		$sum = $productPrice * $quantity;
-		return $sum;
-		// return $fetch['id'];
+		$stmt = "SELECT quantity from product where id = '$prodID'";
+		$result = $this->connect()->query($stmt);
+		$numberrows = $result->num_rows;
+		if ($numberrows > 0) {
+			$data = $result->fetch_assoc();
+			$string = implode('|',$data);
+			return $string;
+		}
+		else{
+			return '';
+		}
 	}
 	public function customerCart()
 	{

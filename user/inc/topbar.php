@@ -13,7 +13,7 @@
 							<img class="rounded-circle" src="assets/img/user.jpg" width="24" alt="Admin">
 							<span class="status online"></span>
 						</span>
-						<span>Admin</span>
+						<span><?=$_SESSION['user']?></span>
                     </a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="#">My Profile</a>

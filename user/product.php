@@ -22,26 +22,16 @@
                            $object->userProfile($fname,$lname,$dob,$gender,$address,$phoneNo,$email);
                         }
 
-                        if (isset($_POST['CheckOut'])) {
-                            foreach ($_SESSION['shopping_cart'] as $values)
-                            $counter =0; 
+                        if (isset($_POST['CheckOut']) && !empty($_SESSION['shopping_cart'])) {
+                          // echo "<script>alert('coming here')</script>";
+                            foreach ($_SESSION['shopping_cart'] as $values) 
                             {
+
                                 $productID = $values['item_id'];
                                   $cust_id = $_SESSION['user'];
                                   $quantity = $values['item_quantity'];
-                                // $object->cartOrder($productID, $cust_id, $quantity);
-                                $date = date('Y-m-d');
-                                $insert = "INSERT INTO orders(productID,custID,quantity,date_create) Values ('$productID','$cust_id','$quantity','$date')";
-                                $result = $this->connect()->query($insert);
-                                if($result){
-                                    $counter += $quantity;
-                                }
-                                else{
-                                    echo "<script>alert('Somtething went wrong')</script>";
-                                }
-
+                                $object->cartOrder($productID, $cust_id, $quantity);
                             }
-                            $object->updateCartOrder($productID, $quantity);
                             echo "<script>alert('Order Placed Success ')</script>";
                             echo '<script>window.location = "product.php"</script>';
                             unset($_SESSION['shopping_cart']);

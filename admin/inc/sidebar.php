@@ -24,10 +24,10 @@
                             <a href="stockIn.php"><i class="fa fa-th"></i> <span>Stock-in</span></a>
                         </li>
                         <li>
-                            <a href="order.html"><i class="fa fa-calendar-check-o"></i> <span>orders</span></a>
+                            <a href="orders.php"><i class="fa fa-calendar-check-o"></i> <span>orders</span></a>
                         </li>
                         <li>
-                            <a href="departments.html"><i class="fa fa-list-alt"></i> <span>Inventory</span></a>
+                            <a href="inventory.php"><i class="fa fa-list-alt"></i> <span>Inventory</span></a>
                         </li>
                         <li>
                             <a href="feed.php"><i class="fa fa-spoon"></i> <span>Feed</span></a>

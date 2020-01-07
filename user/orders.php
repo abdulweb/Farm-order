@@ -17,14 +17,15 @@
                                     <th>#</th>
                                     <th>Product Name</th>
                                     <th>Quantity</th>
-                                    <th>Price</th>
+                                    <th>Product Price</th>
+                                    <th>Total Price</th>
                                     <th>Date Availabe</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                  <?php
-                                        $results = $object->allOrders();
+                                        $results = $object->allMyOrders($_SESSION['user']);
                                         if(!empty($results)){
                                         $i=1;
                                         foreach($results as $value) { 
@@ -34,9 +35,10 @@
                                   <td><?=$object->getProductName($value['productID'])?></td>
                                   <td><?=$value['quantity']?></td>
                                   <td><?=$object->getProductPrice($value['productID'])?></td>
+                                  <td><?=($object->getProductPrice($value['productID'])) * ($value['quantity'])?></td>
                                   <td><?=$value['date_create']?></td>
                                   <td><?php if ($value['status']==1) {
-                                        echo "<small class='badge badge-success text-white'>verified</small>";
+                                        echo "<small class='badge badge-success text-white'>Processed</small>";
                                   }else{
                                     echo "<small class='badge badge-warning text-white'>pending</small>";
                                     } ?></td>
