@@ -865,6 +865,24 @@ class user extends dbh
 			return '';
 		}
 	}
+
+	public function deleteCustomer($id)
+	{
+		$stmt = "DELETE FROM profile where email = '$id'";
+		if($this->connect()->query($stmt))
+		{
+			$stmtx = "DELETE FROM user where email = '$id'";
+			$result = $this->connect()->query($stmtx);
+			if ($result) 
+			{
+				echo '<script>alert("Staff Deleted Successfully")</script>';
+			}
+			else{
+				echo '<script>alert("Please Try Agin. Error Occured")</script>';
+			}
+		}
+		
+	}
 		
 
 	############################################################
@@ -997,6 +1015,94 @@ class user extends dbh
 		              }
 			}
 	}
+
+	public function userProfileUpdate($fname,$lname,$dob,$gender,$address,$phoneNo,$email)
+	{
+		
+			if (empty($phoneNo)) 
+			{
+				echo '<div class ="alert alert-danger"> <strong> Sorry !!! phone is required  </strong> </div>';
+			}
+			else
+			{
+				$date_add = date('Y-m-d');
+				$target_dir = "uploads/";
+                $target_file1 = $target_dir . basename($_FILES["passport"]["name"]);
+                $uploadOk = 1;
+                $imageFileType = pathinfo($target_file1,PATHINFO_EXTENSION);
+                $check = getimagesize($_FILES["passport"]["tmp_name"]);
+                // check if there's image for update
+                	if (empty($check) || $check == null) {
+                		$updteProfile = "UPDATE profile set fname ='$fname', lname = '$lname', dob ='$dob', gender ='$gender', address ='$address',phone = '$phoneNo' where email ='$email' ";
+                		$result = $this->connect()->query($updteProfile);
+                		if ($result) {
+                			$_SESSION['update_succ_msg'] = '<div class ="alert alert-success"> <strong> profile Update Successfully  </strong> </div>';
+                		}
+                		else{
+                			$_SESSION['update_err_msg'] = '<div class ="alert alert-danger"> <strong> profile Update Successfully  </strong> </div>';
+                		}
+                	}
+                	// end of Image check
+
+                // with image for update
+                	else
+                	{
+                		//
+            			if($check !== false) 
+		                {
+		                    //echo "File is an image - " . $check["mime"] . ".";
+		                    $uploadOk = 1;
+		                } 
+		                else {
+		                	echo '<div class ="alert alert-danger"> <strong> Sorry !!! Passport is not an image. Please select Image file !  </strong> </div>';
+		                    $uploadOk = 0;
+		                }
+		                // check passport
+		                if ($_FILES["passport"]["size"] > 5000000) 
+		                  {
+		                  	echo '<div class ="alert alert-danger"> <strong> Sorry, your Passport file is too large. Must not be more than 5MB  </strong> </div>';
+		                      $uploadOk = 0;
+		                  }
+
+		                  // Allow certain file formats
+		                 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") 
+		                  {
+		                  	echo '<div class ="alert alert-danger"> <strong> Sorry, only JPG, JPEG, PNG  format is allowed for Passport.</strong> </div>';
+		                      $uploadOk = 0;
+		                  }
+		                  if ($uploadOk == 0) 
+		                  {
+		                  	echo '<div class ="alert alert-danger"> <strong> Sorry, your file was not uploaded. Please retry.</strong> </div>';
+		                        
+
+		                  // if everything is ok, try to upload file
+		                  }
+			              else
+			              {
+			              	if ( (move_uploaded_file($_FILES["passport"]["tmp_name"], $target_file1)))
+			              	{
+			              		$updteProfile = "UPDATE profile set fname ='$fname', lname = '$lname', dob ='$dob', gender ='$gender', address ='$address',phone = '$phoneNo', passport ='$target_file1' where email ='$email' ";
+			                		$result = $this->connect()->query($updteProfile);
+			                		if ($result) {
+			                			$_SESSION['update_succ_msg'] = '<div class ="alert alert-success"> <strong> profile Update Successfully  </strong> </div>';
+			                		}
+			                		else{
+			                			$_SESSION['update_err_msg'] = '<div class ="alert alert-danger"> <strong> profile Update Successfully  </strong> </div>';
+			                		}
+			              	}
+			              	else{
+				              		echo '<div class ="alert alert-danger"> <strong> Error occured Please Contact Admin for help !.</strong> </div>';
+				              	}
+
+                		//
+                	}
+
+                
+               
+			}
+	}
+}
+
 
 	public function allOneUser($email){
 		$stmt = "SELECT * FROM profile where email = '$email'";
@@ -1192,7 +1298,7 @@ class user extends dbh
 
 	public function getAllCustomers()
 	{
-		$stmt = "SELECT * FROM customers";
+		$stmt = "SELECT * FROM user";
 		$result = $this->connect()->query($stmt);
 		$numberrows = $result->num_rows;
 		if ($numberrows >0) {
@@ -1428,7 +1534,7 @@ class user extends dbh
 	}
 
 	public function getCustomerdeatils($id){
-		$stmt = "SELECT * from customer_cart where transcationID = '$id'";
+		$stmt = "SELECT * from profile where email = '$id'";
 		$result = $this->connect()->query($stmt);
 		$numberrows = $result->num_rows;
 		if ($numberrows > 0) {

@@ -10,7 +10,7 @@
                             <a href="#"><i class="fa fa-money"></i> <span> users </span> <span class="menu-arrow"></span></a>
                             <ul style="display: none;">
                                 <li><a href="manageStaff.php">Manage Staffs</a></li>
-                                <li><a href="#">Manage Customers</a></li>
+                                <li><a href="manageCustomer.php">Manage Customers</a></li>
                             </ul>
                         </li>
                         <li class="submenu">

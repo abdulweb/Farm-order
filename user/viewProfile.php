@@ -8,12 +8,20 @@
          
     ?>
     <div class="col-sm-5 col-6 text-right m-b-30">
-        <a href="#" class="btn btn-success btn-rounded"><i class="fa fa-plus"></i> Edit Profile</a>
+        <a href="editprofile.php?id=<?php echo htmlentities($result['email']);?>" class="btn btn-success btn-rounded"><i class="fa fa-plus"></i> Edit Profile</a>
     </div>
 </div>
 <div class="card-box profile-header">
     <div class="row">
         <div class="col-md-12">
+        <?php
+            if (!empty($_SESSION['update_succ_msg'])) {
+               echo $_SESSION['update_succ_msg'];
+            }
+            if (!empty($_SESSION['update_err_msg'])) {
+               echo $_SESSION['update_err_msg'];
+            }
+        ?>
             <div class="profile-view">
                 <div class="profile-img-wrap">
                     <div class="profile-img">
@@ -65,3 +73,7 @@
 
 </div>
 </div>
+<?php
+    unset($_SESSION['update_succ_msg']);
+    unset($_SESSION['update_err_msg']);
+ ?>
