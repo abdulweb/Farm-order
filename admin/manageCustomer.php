@@ -47,7 +47,7 @@
                                             
                                     ?> 
                                 <tr>
-                                  <td><img width="28" height="28" src="<?=$getDetail['passport']?>" class="rounded-circle m-r-5" alt=""><?=$getDetail['fname']. " ". $getDetail['lname']?></td>
+                                  <td><img width="28" height="28" src="<?='../user/'.$getDetail['passport']?>" class="rounded-circle m-r-5" alt=""><?=$getDetail['fname']. " ". $getDetail['lname']?></td>
                                   <td><?=$value['email']?></td>
                                   <td><?=$getDetail['phone']?></td>
                                   <td><?=$getDetail['gender']?></td>
